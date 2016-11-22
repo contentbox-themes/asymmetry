@@ -1,8 +1,8 @@
 {
     "name":"ContentBox Theme - Asymmetry",
-    "version":"1.0.0",
+    "version":"1.0.1",
     "slug":"cbtheme-asymmetry",
-    "location" : "https://github.com/contentbox-themes/open/archive/master.zip",
+    "location":"contentbox-themes/asymmetry#v1.0.1",
     "author":"Ortus Solutions",
     "homepage":"http://www.ortussolutions.com/products/contentbox",
     "documentation":"https://github.com/contentbox-themes/asymmetry",
@@ -34,6 +34,11 @@
     },
     "installPaths":{
         
+    },
+    "scripts":{
+        "postVersion":"package set location='contentbox-themes/asymmetry#v`package version`'",
+        "onRelease":"publish",
+        "postPublish":"!git push origin master && !git push origin master --tags"
     },
     "ignore":[
         "**/.*",
