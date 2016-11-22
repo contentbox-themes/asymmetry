@@ -152,7 +152,7 @@ component{
 	*/
 	private function generatePageContentStackFields(){
 		var aFieldKeys = [ "bgColor", "alignment","vcenter" ];
-		var pageSectionCatName = settingService.getSetting("cb_theme_asymmetry_sec2Category");
+		var pageSectionCatName = settingService.getSetting("cb_theme_#settingService.getSetting( 'cb_site_theme' )#_sec2Category");
 		
 		// is there a category selected
 		if( pageSectionCatName != "none" ){
