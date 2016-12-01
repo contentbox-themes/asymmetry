@@ -29,10 +29,6 @@ script:
 
 # Deploy assets to S3
 deploy:
-  on:
-    branch:
-      - master
-      - development
   skip_cleanup: true
   provider: s3
   access_key_id: $AWS_ACCESS_KEY
@@ -42,13 +38,11 @@ deploy:
   upload-dir: ortussolutions/contentbox-themes
   acl: public_read
 
-# Publish to ForgeBox only on master commits
-deploy:
-  on:
-    branch:
-      - master
-  provider: script
-  script: cd $TRAVIS_BUILD_DIR/_tmp && box forgebox publish
+after_deploy:
+  # Only publish on master branch
+  - if [ $TRAVIS_BRANCH == "master" ];
+  then cd $TRAVIS_BUILD_DIR/_tmp && box forgebox publish;
+  fi
 
 # Slack notifications
 notifications:
