@@ -40,8 +40,8 @@ deploy:
 
 after_deploy:
   # Only publish on master branch
-  - |
-  if [ $TRAVIS_BRANCH == "master" ]; then
+  >
+  if [ $TRAVIS_BRANCH == 'master' ]; then
     cd $TRAVIS_BUILD_DIR/_tmp && box forgebox publish;
   fi
 
