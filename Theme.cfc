@@ -71,7 +71,7 @@ component{
 	this.description 	= "ContentBox Asymmetry layout for ContentBox 3 based on Bootstrap 3";
 	this.version		= "@build.version@+@build.number@";
 	this.author 		= "Ortus Solutions";
-	this.authorURL		= "https://www.ortussolutions";
+	this.authorURL		= "https://www.ortussolutions.com";
 	// Screenshot URL, can be absolute or locally in your layout package.
 	this.screenShotURL	= "screenshot.png";
 	
