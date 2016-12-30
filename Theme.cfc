@@ -86,13 +86,13 @@ component{
 			{ name="cbBootswatchTheme", 	group="Colors", defaultValue="corporate", 	type="select", 		label="ContentBox Color Palette:", 	required="false", optionsUDF="getSwatches", groupIntro="Control the color scheme of your entire site by changing the color palette.", fieldHelp="#loadHelpFile( 'cbBootswatchTheme.html' )#"  },
 			
 			{ name="headerLogo", 			group="Header", defaultValue="", 		type="text", 	label="Logo URL:", groupIntro="Customize the header section of your theme.", 	fieldDescription="Enter a relative or full url for the website logo. Recommended dimensions: 300x50."  },
-			{ name="headerMainNav", 		group="Header", defaultValue="none", 		type="select", 	label="Main Navigation:", options="none,#menus()#", fieldDescription="Select a menu for the Main Navigation."},
+			{ name="headerMainNav", 		group="Header", defaultValue="none", 		type="select", 	label="Main Navigation:", optionsUDF="menus", fieldDescription="Select a menu for the Main Navigation."},
 			
-			{ name="secImgsCategory", 		group="Images Section", defaultValue="none", 	type="select", 			label="Blog Category:", options="none,#entryCategories()#", groupIntro="Add blog entries from a selected category." },
+			{ name="secImgsCategory", 		group="Images Section", defaultValue="none", 	type="select", 			label="Blog Category:", optionsUDF="entryCategories", groupIntro="Add blog entries from a selected category." },
 			
-			{ name="sec2Category", 			group="Stacked Pages", defaultValue="none", 	type="select", 			label="Page Category:", options="none,#entryCategories()#", groupIntro="Display content from pages in homepage.", fieldDescription="Select the page category.", fieldHelp="#loadHelpFile( 'pageContentStack.html' )#" },
+			{ name="sec2Category", 			group="Stacked Pages", defaultValue="none", 	type="select", 			label="Page Category:", optionsUDF="entryCategories", groupIntro="Display content from pages in homepage.", fieldDescription="Select the page category.", fieldHelp="#loadHelpFile( 'pageContentStack.html' )#" },
 			
-			{ name="csCategory", 			group="Content Store Entries", 	defaultValue="none", 	type="select", 		label="Content Store Category:", options="none,#entryCategories()#", groupIntro="Feature a Content Store category.", fieldDescription="Select the content store category.", fieldHelp="#loadHelpFile( 'contentStoreGrid.html' )#" },
+			{ name="csCategory", 			group="Content Store Entries", 	defaultValue="none", 	type="select", 		label="Content Store Category:", optionsUDF="entryCategories", groupIntro="Feature a Content Store category.", fieldDescription="Select the content store category.", fieldHelp="#loadHelpFile( 'contentStoreGrid.html' )#" },
 			{ name="csTitle", 				group="Content Store Entries", 	defaultValue="", 		type="text", 		label="Content Store Title:" },
 			{ name="csIntro",				group="Content Store Entries", 	defaultValue="", 		type="textarea", 	label="Content Store Text:" },
 			
@@ -109,8 +109,9 @@ component{
 			{ name="locPhone", 				group="Location", defaultValue="", 		type="text", 	label="Phone:" },
 			{ name="locEmail", 				group="Location", defaultValue="", 		type="text", 	label="Email:" },
 				
-			{ name="rssDiscovery", 			group="Homepage", 	defaultValue="true", 	type="boolean",		label="Active RSS Discovery Links", 	required="false" },
-			{ name="showCategoriesBlogSide", 	group="Blog Sidebar Options", defaultValue="true", type="boolean",		label="Show Categories in Blog Sidebar", 	required="false" },
+			{ name="rssDiscovery", 			group="Homepage", defaultValue="true", 	type="boolean",	label="Active RSS Discovery Links", required="false" },
+			
+			{ name="showCategoriesBlogSide", 	group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Categories in Blog Sidebar", 	required="false" },
 			{ name="showRecentEntriesBlogSide", group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Recent Enties in Blog Sidebar", 	required="false" },
 			{ name="showSiteUpdatesBlogSide", 	group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Site Updates in Blog Sidebar", 	required="false" },
 			{ name="showEntryCommentsBlogSide", group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Entry Comments in Blog Sidebar", 	required="false" },
@@ -208,13 +209,15 @@ component{
 		}
 	}
 	
-	private string function entryCategories() {
+	string function entryCategories() {
 		var categoryList = arraytoList( categoryService.getAllNames() );
+		categoryList = ListPrepend( categoryList, "none" );
 		return categoryList;
 	}
 	
-	private string function menus() { 
+	string function menus() { 
 		var menuList = arraytoList( menuService.getAllSlugs() );
+		menuList = ListPrepend( menuList, "none" );
 		return menuList;
 	}
 }
