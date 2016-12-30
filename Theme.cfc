@@ -209,12 +209,18 @@ component{
 		}
 	}
 	
+	/**
+	* Gets names of categories
+	*/
 	string function entryCategories() {
 		var categoryList = arraytoList( categoryService.getAllNames() );
 		categoryList = ListPrepend( categoryList, "none" );
 		return categoryList;
 	}
 	
+	/**
+	* Gets all menu slugs
+	*/
 	string function menus() { 
 		var menuList = arraytoList( menuService.getAllSlugs() );
 		menuList = ListPrepend( menuList, "none" );
