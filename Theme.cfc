@@ -57,7 +57,10 @@
 * - label : The HTML label of the control (defaults to name)
 * - title : The HTML title of the control (defaults to empty string)
 * - options : The select box options. Can be a list or array of values or an array of name-value pair structures
-* 
+* - group : lets you group inputs under a Group name - settings should be in order for groupings to work as expected
+* - groupIntro : Lets you add a description for a group of fields
+* - fieldDescription : Lets you add a description for an individual field
+* - fieldHelp : Lets you add a chunk of HTML for a Modal, openable by the User by clicking on question mark next to the field label. Recommended use is to readFiles from the ./includes/help directory, with a helper function, for example: loadHelpFile( 'cbBootswatchTheme.html' ); 
 */
 component{
  	
@@ -80,19 +83,20 @@ component{
 		
 		// Layout Settings
 		this.settings = [
-			{ name="cbBootswatchTheme", 	group="Colors", defaultValue="corporate", 	type="select", 		label="ContentBox Swatch Theme:", 	required="false", options="corporate,teetime,green-blue" },
-			{ name="headerLogo", 			group="Header", defaultValue="", 		type="text", 	label="Logo URL:" },
-			{ name="headerMainNav", 		group="Header", defaultValue="none", 		type="select", 	label="Main Navigation:", options="none,#menus()#"},
+			{ name="cbBootswatchTheme", 	group="Colors", defaultValue="corporate", 	type="select", 		label="ContentBox Color Palette:", 	required="false", optionsUDF="getSwatches", groupIntro="Control the color scheme of your entire site by changing the color palette.", fieldHelp="#loadHelpFile( 'cbBootswatchTheme.html' )#"  },
 			
-			{ name="secImgsCategory", 		group="Images Section", defaultValue="none", 	type="select", 			label="Blog Category:", options="none,#entryCategories()#" },
+			{ name="headerLogo", 			group="Header", defaultValue="", 		type="text", 	label="Logo URL:", groupIntro="Customize the header section of your theme.", 	fieldDescription="Enter a relative or full url for the website logo. Recommended dimensions: 300x50."  },
+			{ name="headerMainNav", 		group="Header", defaultValue="none", 		type="select", 	label="Main Navigation:", optionsUDF="menus", fieldDescription="Select a menu for the Main Navigation."},
 			
-			{ name="sec2Category", 			group="Stacked Pages", defaultValue="none", 	type="select", 			label="Page Category:", options="none,#entryCategories()#" },
+			{ name="secImgsCategory", 		group="Images Section", defaultValue="none", 	type="select", 			label="Blog Category:", optionsUDF="entryCategories", groupIntro="Add blog entries from a selected category." },
 			
-			{ name="csCategory", 			group="Content Store Entries", 	defaultValue="none", 	type="select", 		label="Content Store Category:", options="none,#entryCategories()#" },
+			{ name="sec2Category", 			group="Stacked Pages", defaultValue="none", 	type="select", 			label="Page Category:", optionsUDF="entryCategories", groupIntro="Display content from pages in homepage.", fieldDescription="Select the page category.", fieldHelp="#loadHelpFile( 'pageContentStack.html' )#" },
+			
+			{ name="csCategory", 			group="Content Store Entries", 	defaultValue="none", 	type="select", 		label="Content Store Category:", optionsUDF="entryCategories", groupIntro="Feature a Content Store category.", fieldDescription="Select the content store category.", fieldHelp="#loadHelpFile( 'contentStoreGrid.html' )#" },
 			{ name="csTitle", 				group="Content Store Entries", 	defaultValue="", 		type="text", 		label="Content Store Title:" },
 			{ name="csIntro",				group="Content Store Entries", 	defaultValue="", 		type="textarea", 	label="Content Store Text:" },
 			
-			{ name="hpArticleTitle", 		group="Homepage Article", 	defaultValue="", 		type="text", 		label="Homepage Article Title:" },
+			{ name="hpArticleTitle", 		group="Homepage Article", 	defaultValue="", 		type="text", 		label="Homepage Article Title:", groupIntro="Add an article to the middle column of the homepage, above the footer." },
 			{ name="hpArticleText",			group="Homepage Article", 	defaultValue="", 		type="textarea", 	label="Homepage Article Text:" },
 			{ name="hpArticleBtnText", 		group="Homepage Article", 	defaultValue="", 		type="text", 		label="Homepage Article Button Title:" },
 			{ name="hpArticleBtnURL", 		group="Homepage Article", 	defaultValue="", 		type="text", 		label="Homepage Article Button URL:" },
@@ -105,8 +109,9 @@ component{
 			{ name="locPhone", 				group="Location", defaultValue="", 		type="text", 	label="Phone:" },
 			{ name="locEmail", 				group="Location", defaultValue="", 		type="text", 	label="Email:" },
 				
-			{ name="rssDiscovery", 			group="Homepage", 	defaultValue="true", 	type="boolean",		label="Active RSS Discovery Links", 	required="false" },
-			{ name="showCategoriesBlogSide", 	group="Blog Sidebar Options", defaultValue="true", type="boolean",		label="Show Categories in Blog Sidebar", 	required="false" },
+			{ name="rssDiscovery", 			group="Homepage", defaultValue="true", 	type="boolean",	label="Active RSS Discovery Links", required="false" },
+			
+			{ name="showCategoriesBlogSide", 	group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Categories in Blog Sidebar", 	required="false" },
 			{ name="showRecentEntriesBlogSide", group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Recent Enties in Blog Sidebar", 	required="false" },
 			{ name="showSiteUpdatesBlogSide", 	group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Site Updates in Blog Sidebar", 	required="false" },
 			{ name="showEntryCommentsBlogSide", group="Blog Sidebar Options", defaultValue="true", type="boolean",	label="Show Entry Comments in Blog Sidebar", 	required="false" },
@@ -122,6 +127,28 @@ component{
 		];
 		return this;
 	}
+	
+	/**
+	* Build the swatches options
+	*/
+	array function getSwatches(){
+		return listToArray( "corporate,teetime,green-blue" );
+	}
+	
+	/**
+	* loadHelpFile - helper function for loading html help into a variable for modal
+	* @helpFileName - the name of the file to read and return
+	* @helpFilePath - the relative directory for the help files. Defaulting to ./includes/help/ inside the theme.
+	* @return the contents of the file or empty string if the file does not exist
+	*/
+	function loadHelpFile( required string helpFileName, string helpFilePath='./includes/help/' ){
+		try {
+			return fileRead( arguments.helpFilePath & arguments.helpFileName );
+		} catch( any e ){
+			return '';
+		}
+	}
+	
 	/**
 	* Call Back when layout is activated
 	*/
@@ -182,13 +209,21 @@ component{
 		}
 	}
 	
-	private string function entryCategories() {
+	/**
+	* Gets names of categories
+	*/
+	string function entryCategories() {
 		var categoryList = arraytoList( categoryService.getAllNames() );
+		categoryList = ListPrepend( categoryList, "none" );
 		return categoryList;
 	}
 	
-	private string function menus() { 
+	/**
+	* Gets all menu slugs
+	*/
+	string function menus() { 
 		var menuList = arraytoList( menuService.getAllSlugs() );
+		menuList = ListPrepend( menuList, "none" );
 		return menuList;
 	}
 }
